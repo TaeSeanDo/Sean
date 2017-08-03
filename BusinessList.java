@@ -93,16 +93,16 @@ public class BusinessList {
            i++;
        }
         
-        
     }
     
-//    public String find() {
-//        boolean found = false;
-//        int midpoint
-//        while (!found) {
-//            
-//        }
-//    }
+    public String find(String name) {
+        boolean found = false;
+        int midpoint;
+        while (!found) {
+            
+        }
+        return null;
+    }
     
 
         
