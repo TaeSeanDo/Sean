@@ -1,23 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package mergesort;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.Scanner;
 
-/**
- *
- * @author Education Unlimited
- */
+
 public class BusinessList {
 
     BusinessRecord[] businessRecords = new BusinessRecord[100];
@@ -47,54 +36,84 @@ public class BusinessList {
     }
 
     public void mergeSort() {
-        String[] workspace = new String[numOfBusinesses];
-        recMergeSort(workspace, 0, numOfBusinesses);
+        BusinessRecord[] workspace = new BusinessRecord[numOfBusinesses];
+        recMergeSort(workspace, 0, numOfBusinesses-1);
         System.out.println(Arrays.toString(businessRecords));
     }
 
-    public void recMergeSort(String[] workspace, int lowerBound, int upperBound) {
+
+
+    public void recMergeSort(BusinessRecord[] workspace, int lowerBound, int upperBound) {
         if (lowerBound != upperBound) {
-            int midpoint = (upperBound + lowerBound) / 2;//integer division
+            int midpoint = (upperBound + lowerBound) / 2;//rounds down
+
+            System.out.println("Splitting array [" + lowerBound + ", " + midpoint + "]");
             recMergeSort(workspace, lowerBound, midpoint);
+            System.out.println("Done splitting array [" + lowerBound + ", " + midpoint + "]");
+            
+            System.out.println("Splitting array [" + (midpoint + 1) + ", " + upperBound + "]");
             recMergeSort(workspace, midpoint + 1, upperBound);
+            System.out.println("Done splitting array [" + (midpoint + 1) + ", " + upperBound + "]");
+
+            System.out.println("merging " + lowerBound + ", " + midpoint + " and " + (midpoint+1) + ", " + upperBound);
             merge(workspace, lowerBound, midpoint + 1, upperBound);
-        }
+        } //else {
+//            System.out.println("Array" + lowerBound);
+//        }
 
     }
 
-    public void merge(String[] workspace, int lowPointer, int highPointer, int upperBound) {
+    public void merge(BusinessRecord[] workspace, int lowPointer, int highPointer, int upperBound) {
+
+//        System.out.println("Low pointer: " + lowPointer);
+//        System.out.println("High pointer: " + highPointer);
+        
+        int lowPointerInit = lowPointer;
         int highPointerInit = highPointer;
         int i = lowPointer;
         
         while (highPointer <= upperBound && lowPointer < highPointerInit) {
+//
+//            System.out.println("Low pointer: " + lowPointer);
+//
+//            System.out.println("High pointer: " + highPointer);
             if (businessRecords[lowPointer].getName().compareTo(businessRecords[highPointer].getName()) < 0) {
-                workspace[i] = businessRecords[lowPointer].stringOut();
+                workspace[i] = businessRecords[lowPointer];
                 i++;
                 lowPointer++;
             } else {
-                workspace[i] = businessRecords[highPointer].stringOut();
+                workspace[i] = businessRecords[highPointer];
                 i++;
                 highPointer++;
 
             }
         }
         
-        while (highPointer > upperBound && lowPointer < highPointerInit) {
-            workspace[i] = businessRecords[lowPointer].stringOut();
+        for (int j = lowPointerInit; j <= highPointerInit; j++) {
+            if (workspace[j] == null) break;
+//            System.out.println(workspace[j].stringOut());
+        }
+
+//        System.out.println("Low pointer: " + lowPointer);
+        while (lowPointer < highPointerInit) {
+//            System.out.println("array " + lowPointerInit + ", " + highPointerInit + " at low pointer: " + businessRecords[lowPointer].stringOut());
+//            System.out.println("i: " + i);
+//            System.out.println("businessRecords[lowPointer]: " + businessRecords[lowPointer].stringOut());
+            workspace[i] = businessRecords[lowPointer];
+            System.out.println("workspace[i] = " + workspace[i].stringOut());
             i++;
             lowPointer++;
         }
         
-        while (highPointer <= upperBound && lowPointer >= highPointerInit) {
-            workspace[i] = businessRecords[highPointer].stringOut();
+        while (highPointer <= upperBound) {
+            workspace[i] = businessRecords[highPointer];
             i++;
             highPointer++;
         }
         
-        for (int j = 0; j < workspace.length; j++) {
-            if (workspace[j] == null) break;
-            System.out.println(workspace[j]);
-            BusinessRecord br = new BusinessRecord(workspace[j].split(", ")[0], workspace[j].split(", ")[1]);
+        for (int j = lowPointerInit; j <= upperBound; j++) {
+            System.out.println(workspace[j].stringOut());
+            BusinessRecord br = new BusinessRecord(workspace[j].getName(), workspace[j].getPhNum());
             businessRecords[j] = br;
         }
         
