@@ -22,15 +22,35 @@ public class Room {
         title = name;
     }
     
+    public String getTitle() {
+        return title;
+    }
+    
     public void addDescription(String description) {
         descriptions[descriptionsSize] = description;
         descriptionsSize++;
+    }
+    
+    public String[] getDescriptions() {
+        return descriptions;
+    }
+    
+    public int getDescriptionsSize() {
+        return descriptionsSize;
     }
     
     public void addOption(String optStr, String tag) {
         Option o = new Option(optStr, tag);
         options[optionsSize] = o;
         optionsSize++;
+    }
+    
+    public Option[] getOptions() {
+        return options;
+    }
+    
+    public int getOptionsSize() {
+        return optionsSize;
     }
     
 }
