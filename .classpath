@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="Doubly Linked List/src"/>
+	<classpathentry kind="src" path="FinalProject-ChooseYourOwnAdventure/src"/>
+	<classpathentry kind="src" path="HelloWorld/src"/>
+	<classpathentry kind="src" path="MergeSort/src"/>
+	<classpathentry kind="src" path="Queue/src"/>
+	<classpathentry kind="src" path="SortingAlgorithms/src"/>
+	<classpathentry kind="src" path="stackCalculator/src"/>
+	<classpathentry kind="src" path="Tree/src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="Doubly Linked List/build/classes"/>
+</classpath>
