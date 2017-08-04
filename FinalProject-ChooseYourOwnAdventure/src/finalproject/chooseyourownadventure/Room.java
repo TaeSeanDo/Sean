@@ -9,7 +9,7 @@ public class Room {
     Option[] options = new Option[12];
     int optionsSize = 0;
     
-    private class Option {
+    public class Option {
         String optString;
         String tagString;
         public Option(String optStr, String tag) {

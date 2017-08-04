@@ -1,16 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package finalproject.chooseyourownadventure;
 
 import java.util.NoSuchElementException;
 
-/**
- *
- * @author Education Unlimited
- */
+
 public class DoublyLinkedListOfRooms {
         public enum position {
         FIRST, PREVIOUS, FOLLOWING, LAST

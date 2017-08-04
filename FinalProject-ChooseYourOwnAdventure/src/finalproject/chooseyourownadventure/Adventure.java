@@ -5,13 +5,13 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class game {
+public class Adventure {
 
     Room[] rooms = new Room[100];
     int roomsSize = 0;
     DoublyLinkedListOfRooms history = new DoublyLinkedListOfRooms();
 
-    public game(File file) {
+    public Adventure(File file) {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             Room r = new Room();
             String option = "";
@@ -22,13 +22,18 @@ public class game {
 
                 if ("".equals(currentLine)) {
                     rooms[roomsSize] = r;
+                    roomsSize++;
                     r = new Room();
+                    currentLine = reader.readLine();
                     continue;
                 }
                 String function = currentLine.split(" ")[0];
                 StringBuilder sb = new StringBuilder(currentLine);
+//                char[] deleted = new char[100];
+//                sb.getChars(0, 2, deleted, 0);
+//                System.out.println("0: "+deleted[0] +", 1: "+deleted[1]+", 2: "+deleted[2]);
                 sb.deleteCharAt(0);
-                sb.deleteCharAt(1);
+                sb.deleteCharAt(0);
                 String string = sb.toString();
 
                 switch (function) {
@@ -46,11 +51,8 @@ public class game {
                         r.addOption(option, tab);
                         break;
                     default:
-                        System.out.println("File does not start with key char");
+                        System.err.println("File does not start with key char");
                 }
-
-                rooms[roomsSize] = null;
-                roomsSize++;
                 currentLine = reader.readLine();
 
             }
@@ -58,6 +60,10 @@ public class game {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        Room temp = rooms[0];
+        insertionSortRooms();
+        setRoom(temp.getTitle());
 
     }
 
@@ -67,7 +73,7 @@ public class game {
         array[i] = array[j];
         array[j] = temp;
     }
-    
+
     //insertion sort the rooms by name
     public void insertionSortRooms() {
 
@@ -81,40 +87,68 @@ public class game {
         }
 
     }
-    
-    public String[] RoomOut() {
+
+    private String[] RoomOutput() {
         String[] roomOut = new String[200];
         int roomOutSize = 0;
-        roomOut[roomOutSize] = history.getItem().getTitle();
+        roomOut[roomOutSize] = "Room: " + history.getItem().getTitle();
         roomOutSize++;
         for (int i = 0; i < history.getItem().getDescriptionsSize(); i++) {
             roomOut[roomOutSize] = history.getItem().getDescriptions()[i];
             roomOutSize++;
         }
+
+        int unicodeLtr = 97;
         roomOut[roomOutSize] = "Would you like to:";
-        for (int i = 0; i < history.)
+        roomOutSize++;
+        for (int i = 0; i < history.getItem().getOptionsSize(); i++) {
+            String temp = Character.toString((char) unicodeLtr) + ". ";
+            temp += history.getItem().getOptions()[i].optString;
+            temp += " (to " + history.getItem().getOptions()[i].tagString + ")";
+            roomOut[roomOutSize] = temp;
+            roomOutSize++;
+            unicodeLtr++;
+        }
+        roomOut[roomOutSize] = "";
         return roomOut;
     }
-    
+
+    public void printRoom() {
+        for (String i : RoomOutput()) {
+            if (i == null) {
+                break;
+            }
+            System.out.println(i);
+        }
+    }
+
     private Room binSearch(String rmName, int lowerBound, int upperBound) {
-        int midpoint = (upperBound - lowerBound) / 2;
+        int midpoint = lowerBound + (upperBound - 1) / 2;
+
         if (rooms[midpoint].getTitle().compareTo(rmName) == 0) {
             return rooms[midpoint];
+        } else if (lowerBound == upperBound) {
+            return null;
+        } else {
+            if (rooms[midpoint].getTitle().compareTo(rmName) > 0) {
+                return binSearch(rmName, lowerBound, midpoint);
+            } else {
+                return binSearch(rmName, midpoint, upperBound);
+            }
         }
-        //if not found, check if midpoint is too high
-        if (rooms[midpoint].getTitle().compareTo(rmName) < 0) {
-            return binSearch(rmName, lowerBound, midpoint);
-        }
-        if (rooms[midpoint].getTitle().compareTo(rmName) < 0) {
-            return binSearch(rmName, midpoint, upperBound);
-        }
-        return null;
+
     }
-    
-    public void switchRooms(String rmName) {
+
+    public void setRoom(String rmName) {
         //binary search for rmName in rooms
         Room nextRoom = binSearch(rmName, 0, roomsSize);
         history.insert(nextRoom, DoublyLinkedListOfRooms.position.LAST);
+        printRoom();
     }
     
+    public void backRoom() {
+        history.delete();
+        printRoom();
+    }
+
 }
