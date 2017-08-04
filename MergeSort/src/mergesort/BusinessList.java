@@ -47,12 +47,12 @@ public class BusinessList {
     }
 
     public void mergeSort() {
-        String[] workspace = new String[numOfBusinesses];
+        BusinessRecord[] workspace = new BusinessRecord[numOfBusinesses];
         recMergeSort(workspace, 0, numOfBusinesses);
         System.out.println(Arrays.toString(businessRecords));
     }
 
-    public void recMergeSort(String[] workspace, int lowerBound, int upperBound) {
+    public void recMergeSort(BusinessRecord[] workspace, int lowerBound, int upperBound) {
         if (lowerBound != upperBound) {
             int midpoint = (upperBound + lowerBound) / 2;//integer division
             recMergeSort(workspace, lowerBound, midpoint);
@@ -62,39 +62,41 @@ public class BusinessList {
 
     }
 
-    public void merge(String[] workspace, int lowPointer, int highPointer, int upperBound) {
+    public void merge(BusinessRecord[] workspace, int lowPointer, int highPointer, int upperBound) {
+        int lowPointerInit = lowPointer;
         int highPointerInit = highPointer;
         int i = lowPointer;
         
         while (highPointer <= upperBound && lowPointer < highPointerInit) {
+            System.out.println("Low pointer: " + lowPointer);
+            System.out.println("High pointer: " + highPointer);
             if (businessRecords[lowPointer].getName().compareTo(businessRecords[highPointer].getName()) < 0) {
-                workspace[i] = businessRecords[lowPointer].stringOut();
+                workspace[i] = businessRecords[lowPointer];
                 i++;
                 lowPointer++;
             } else {
-                workspace[i] = businessRecords[highPointer].stringOut();
+                workspace[i] = businessRecords[highPointer];
                 i++;
                 highPointer++;
 
             }
         }
-        
-        while (highPointer > upperBound && lowPointer < highPointerInit) {
-            workspace[i] = businessRecords[lowPointer].stringOut();
+
+        while (lowPointer < highPointerInit) {
+            workspace[i] = businessRecords[lowPointer];
             i++;
             lowPointer++;
         }
         
-        while (highPointer <= upperBound && lowPointer >= highPointerInit) {
-            workspace[i] = businessRecords[highPointer].stringOut();
+        while (highPointer <= upperBound) {
+            workspace[i] = businessRecords[highPointer];
             i++;
             highPointer++;
         }
         
-        for (int j = 0; j < workspace.length; j++) {
-            if (workspace[j] == null) break;
-            System.out.println(workspace[j]);
-            BusinessRecord br = new BusinessRecord(workspace[j].split(", ")[0], workspace[j].split(", ")[1]);
+        for (int j = lowPointerInit; j <= highPointerInit; j++) {
+            System.out.println(workspace[j].stringOut());
+            BusinessRecord br = new BusinessRecord(workspace[j].getName(), workspace[j].getPhNum());
             businessRecords[j] = br;
         }
         
