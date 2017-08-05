@@ -56,6 +56,9 @@ public class Adventure {
                 currentLine = reader.readLine();
 
             }
+            
+            rooms[roomsSize] = r;
+            roomsSize++;
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -123,25 +126,37 @@ public class Adventure {
     }
 
     private Room binSearch(String rmName, int lowerBound, int upperBound) {
-        int midpoint = lowerBound + (upperBound - 1) / 2;
-
+        int midpoint = (lowerBound + upperBound) / 2;
+        System.out.println("Calling search " + lowerBound + " , " + upperBound);
         if (rooms[midpoint].getTitle().compareTo(rmName) == 0) {
             return rooms[midpoint];
         } else if (lowerBound == upperBound) {
             return null;
         } else {
             if (rooms[midpoint].getTitle().compareTo(rmName) > 0) {
-                return binSearch(rmName, lowerBound, midpoint);
+                return binSearch(rmName, lowerBound, midpoint-1);
             } else {
-                return binSearch(rmName, midpoint, upperBound);
+                System.out.println("Attempting to call search on " + (int )(midpoint+1) + ", "+upperBound);
+                return binSearch(rmName, midpoint+1, upperBound);
             }
         }
 
     }
+    
+    private Room SeqSearch(String rmName) {
+        for (int i = 0; i < roomsSize; i++) {
+            if (rmName.equals(rooms[i].getTitle())) {
+                return rooms[i];
+            }
+        }
+        return null;
+    }
+    
+    
 
     public void setRoom(String rmName) {
         //binary search for rmName in rooms
-        Room nextRoom = binSearch(rmName, 0, roomsSize);
+        Room nextRoom = binSearch(rmName, 0, roomsSize-1);
         history.insert(nextRoom, DoublyLinkedListOfRooms.position.LAST);
         printRoom();
     }
